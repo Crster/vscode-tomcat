@@ -44,5 +44,6 @@ export enum ServerState {
 export enum PortKind {
     Server = 'Server',
     Http = 'Http',
-    Https = 'Https'
+    Https = 'Https',
+    Debug = 'Debug'
 }

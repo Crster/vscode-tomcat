@@ -136,6 +136,10 @@
         "title": "Start"
       },
       {
+        "command": "tomcat.server.debug.context",
+        "title": "Debug Server"
+      },
+      {
         "command": "tomcat.server.restart.context",
         "title": "Restart"
       },
@@ -274,6 +278,11 @@
           "command": "tomcat.server.start.context",
           "when": "view == tomcatServerExplorer && viewItem == idleserver",
           "group": "tomcat@0"
+        },
+        {
+          "command": "tomcat.server.debug.context",
+          "when": "view == tomcatServerExplorer && viewItem == idleserver",
+          "group": "tomcat@00"
         },
         {
           "command": "tomcat.server.stop.context",

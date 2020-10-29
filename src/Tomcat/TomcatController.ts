@@ -172,6 +172,30 @@ export class TomcatController {
         }
     }
 
+    public async startDebugServer(operationId: string, server: TomcatServer): Promise<void> {
+        let debug = true;
+        server = !server ? await this.selectServer(operationId, true) : server;
+        if (!server) {
+            return;
+        }
+        if (server.isStarted() && ((!server.isDebugging() && !debug) || server.isDebugging() === debug)) {
+            return;
+        }
+        const port = await Utility.getPort(server.getServerConfigPath(), Constants.PortKind.Debug);
+        if (port) {
+            server.setDebugInfo(parseInt(port), server.getDebugWorkspace())
+        } else {
+            server.clearDebugInfo();
+        }
+        if (server.isStarted()) {
+            Utility.infoTelemetryStep(operationId, 'restart');
+            await this.stopOrRestartServer(operationId, server, true);
+        } else {
+            Utility.infoTelemetryStep(operationId, 'start');
+            await this.startTomcat(operationId, server);
+        }
+    }
+
     public async runOrDebugOnServer(operationId: string, uri: vscode.Uri, debug?: boolean, server?: TomcatServer): Promise<void> {
         if (!uri) {
             const dialog: vscode.Uri[] = await Utility.trackTelemetryStep(operationId, 'select war', () => vscode.window.showOpenDialog({

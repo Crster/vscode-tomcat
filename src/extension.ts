@@ -54,6 +54,7 @@ async function initializeExtension(_opId: string, context: vscode.ExtensionConte
     // .context commands are duplicate for better naming the context commands and make it more clear and elegant
     context.subscriptions.push(registerCommandWrapper('tomcat.server.rename.context', (operationId: string, server: TomcatServer) => tomcatController.renameServer(operationId, server)));
     context.subscriptions.push(registerCommandWrapper('tomcat.server.start.context', (operationId: string, server: TomcatServer) => tomcatController.startServer(operationId, server)));
+    context.subscriptions.push(registerCommandWrapper('tomcat.server.debug.context', (operationId: string, server: TomcatServer) => tomcatController.startDebugServer(operationId, server)));
     context.subscriptions.push(registerCommandWrapper('tomcat.server.restart.context', (operationId: string, server: TomcatServer) => tomcatController.stopOrRestartServer(operationId, server, true)));
     context.subscriptions.push(registerCommandWrapper('tomcat.server.stop.context', (operationId: string, server: TomcatServer) => tomcatController.stopOrRestartServer(operationId, server)));
     context.subscriptions.push(registerCommandWrapper('tomcat.server.delete.context', (operationId: string, server: TomcatServer) => tomcatController.deleteServer(operationId, server)));

@@ -19,8 +19,13 @@ export namespace Utility {
             outputPane.show();
             let stderr: string = '';
             const p: child_process.ChildProcess = child_process.spawn(command, args, options);
-            p.stdout.on('data', (data: string | Buffer): void =>
-                outputPane.append(serverName ? `[${serverName}]: ${data.toString()}` : data.toString()));
+            p.stdout.on('data', (data: string | Buffer): void => {
+                if (vscode.debug.activeDebugSession) {
+                    vscode.debug.activeDebugConsole.append(data.toString())
+                }
+                
+                outputPane.append(serverName ? `[${serverName}]: ${data.toString()}` : data.toString())
+            });
             p.stderr.on('data', (data: string | Buffer) => {
                 stderr = stderr.concat(data.toString());
                 outputPane.append(serverName ? `[${serverName}]: ${data.toString()}` : data.toString());
@@ -155,6 +160,8 @@ export namespace Utility {
             } else if (kind === Constants.PortKind.Https) {
                 port = jsonObj.Server.Service.find((item: any) => item.$.name === Constants.CATALINA).Connector.find((item: any) =>
                     (item.$.SSLEnabled.toLowerCase() === 'true')).$.port;
+            } else if (kind === Constants.PortKind.Debug) {
+                port = jsonObj.Server.Debug.find(ii => ii.$.port).$.port
             }
         } catch (err) {
             port = undefined;
